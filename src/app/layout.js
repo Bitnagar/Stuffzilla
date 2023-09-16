@@ -3,8 +3,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import Footer from "@/components/Footer";
 import { ClerkProvider } from "@clerk/nextjs";
-// import { Provider } from "react-redux";
-// import store from "@/store/store";
+import ReduxProvider from "@/components/redux/ReduxProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,14 +14,16 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <ClerkProvider>
+    <ClerkProvider>
+      <html lang="en">
         <body className={inter.className + " "}>
-          <Header />
-          {children}
-          <Footer />
+          <ReduxProvider>
+            <Header />
+            {children}
+            <Footer />
+          </ReduxProvider>
         </body>
-      </ClerkProvider>
-    </html>
+      </html>
+    </ClerkProvider>
   );
 }

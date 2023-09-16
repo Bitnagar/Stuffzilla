@@ -8,9 +8,9 @@ export default function Sidebar() {
   useEffect(() => {
     const resp = fetch("https://fakestoreapi.com/products/categories");
     resp.then((data) => data.json()).then((data) => setCategories(data));
-  }, [categories]);
+  }, []);
   return (
-    <div className="flex flex-col">
+    <>
       <Link href={"/search"}>All</Link>
       {categories.map((c, k) => {
         return (
@@ -27,6 +27,6 @@ export default function Sidebar() {
         <Link href={"/"}>Rating: lowest</Link>
         <Link href={"/"}>Rating: highest</Link>
       </div>
-    </div>
+    </>
   );
 }

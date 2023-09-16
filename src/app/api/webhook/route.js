@@ -1,6 +1,5 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
-import { PrismaClient } from "@prisma/client";
 
 export async function POST(req) {
   const prisma = new PrismaClient();
@@ -60,40 +59,6 @@ export async function POST(req) {
       created_at,
       updated_at,
     } = evt.data;
-
-    await prisma.user.upsert({
-      where: { clerkId: id },
-      create: {
-        clerkId: id,
-        email: email_address,
-        avatar: profile_image_url || "",
-        firstName: first_name,
-        lastName: last_name || "",
-        createdAt: new Date(created_at),
-        updatedAt: new Date(updated_at),
-      },
-      update: {
-        email: email_address,
-        avatar: profile_image_url || "",
-        firstName: first_name,
-        lastName: last_name || "",
-        updatedAt: new Date(updated_at),
-      },
-    });
-
-    await prisma.cart.upsert({
-      where: { userId: id },
-      create: {
-        userId: id,
-        products: { "products": [""] },
-        createdAt: new Date(created_at),
-        updatedAt: new Date(updated_at),
-      },
-      update: {
-        products: { "products": [""] },
-        updatedAt: new Date(updated_at),
-      },
-    });
   }
 
   return new Response("", { status: 201 });

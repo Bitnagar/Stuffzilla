@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ShoppingCart } from "lucide-react";
 import {
   SignedIn,
   SignedOut,
@@ -8,14 +9,13 @@ import {
   SignUpButton,
   UserButton,
 } from "@clerk/nextjs";
-// import { useAuth } from "@clerk/nextjs";
 import { useUser } from "@clerk/nextjs";
+import { useSelector } from "react-redux";
 
 export default function Header() {
   const pathname = usePathname();
-  // const { isSignedIn, sessionId, userId } = useAuth();
   const { isSignedIn } = useUser();
-
+  const cart = useSelector((state) => state.cart);
   return (
     <header className=" bg-transparent p-5 2xl:px-40">
       <nav className="flex items-center justify-between">
@@ -33,6 +33,12 @@ export default function Header() {
           <li>
             <Link href="/" id="about">
               ABOUT
+            </Link>
+          </li>
+          <li>
+            <Link href="/cart" id="about" className="flex gap-2">
+              <ShoppingCart />
+              <p>{cart.length}</p>
             </Link>
           </li>
           {isSignedIn && (

@@ -1,8 +1,14 @@
 "use client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { useDispatch } from "react-redux";
+import { add } from "@/store/cartSlice";
+import { useUser } from "@clerk/nextjs";
 
 export default function Page({ params }) {
+  const dispatch = useDispatch();
+  const { isSignedIn } = useUser();
   /**
    * 
    * {
@@ -15,6 +21,9 @@ export default function Page({ params }) {
     rating: { rate: 3.6, count: 145 }
   }
   */
+  const addToCart = async (product) => {
+    dispatch(add(product));
+  };
 
   const [products, setProducts] = useState([]);
   const category = params.category.replaceAll("-", " ");
@@ -26,14 +35,17 @@ export default function Page({ params }) {
   }, [category]);
 
   return (
-    <div>
+    <div className="grid grid-cols-3">
       {products.map((c, k) => {
         return (
-          <div key={k}>
+          <div
+            key={k}
+            className="flex flex-col gap-10 m-5 border border-solid rounded p-5 items-center justify-center"
+          >
             <Image src={c.image} width={200} height={200} alt={c.title} />
             <h1>{c.description}</h1>
             <h1>${c.price}</h1>
-            <button>Add to cart</button>
+            <Button onClick={() => addToCart(c)}>Add to cart</Button>
           </div>
         );
       })}

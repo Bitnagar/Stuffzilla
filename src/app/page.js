@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import data from "@/lib/sample_data";
 
 export default async function Home() {
   return (

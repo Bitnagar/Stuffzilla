@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { add } from "@/store/cartSlice";
 import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
-import { PrismaClient } from "@prisma/client";
 
 export default function Page() {
   const [products, setProducts] = useState([]);
@@ -31,7 +30,8 @@ export default function Page() {
         },
         body: payload, // body data type must match "Content-Type" header
       });
-      console.log(response);
+      const body = await response.json();
+      console.log(body);
     } catch (error) {
       console.error(error);
     }

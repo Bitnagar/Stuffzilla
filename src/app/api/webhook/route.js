@@ -1,8 +1,8 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
+import { MongoClient } from "mongodb";
 
 export async function POST(req) {
-  const prisma = new PrismaClient();
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 
@@ -50,16 +50,60 @@ export async function POST(req) {
 
   const eventType = evt.type;
   if (eventType === "user.created" || eventType === "user.updated") {
-    const { email_address } = evt.data.email_addresses[0];
-    const {
-      id,
-      first_name,
-      last_name,
-      profile_image_url,
-      created_at,
-      updated_at,
-    } = evt.data;
-  }
+    try {
+      const { email_address } = evt.data.email_addresses[0];
+      const {
+        id,
+        first_name,
+        last_name,
+        profile_image_url,
+        created_at,
+        updated_at,
+      } = evt.data;
 
-  return new Response("", { status: 201 });
+      //insert data to mongodb
+      const uri = process.env.DATABASE_URL;
+      const client = new MongoClient(uri);
+      client
+        .connect()
+        .then(async () => {
+          const collection = client.db("stuffzilla").collection("users");
+          //if user already exist, then update it. Else create it
+          const userData = collection.updateOne(
+            {
+              email_address: email_address,
+            },
+            {
+              $set: {
+                id: id,
+                first_name: first_name,
+                last_name: last_name,
+                email_address: email_address,
+                profile_image_url: profile_image_url,
+                created_at: created_at,
+                updated_at: updated_at,
+              },
+            },
+            { upsert: true }
+          );
+          return userData;
+        })
+        .then(async (userData) => {
+          if (userData) await client.close();
+        });
+
+      return new Response(
+        JSON.stringify({ "message": "Database updated with user record." }),
+        { status: 201 }
+      );
+    } catch (error) {
+      return new Response(JSON.stringify({ "message": error.message }), {
+        status: 500,
+      });
+    }
+  }
+  return new Response(
+    JSON.stringify({ "message": "User record upsert failed." }),
+    { status: 500 }
+  );
 }

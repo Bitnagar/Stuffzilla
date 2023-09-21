@@ -7,15 +7,19 @@ import {
   SignedOut,
   SignInButton,
   SignUpButton,
+  useAuth,
   UserButton,
 } from "@clerk/nextjs";
-import { useUser } from "@clerk/nextjs";
-import { useSelector } from "react-redux";
+import useSWR from "swr";
+import { fetcher } from "@/lib/utils";
 
 export default function Header() {
+  const { isSignedIn, userId: id } = useAuth();
   const pathname = usePathname();
-  const { isSignedIn } = useUser();
-  const cart = useSelector((state) => state.cart);
+  const { data, isLoading } = useSWR(`/api/cart?id=${id}`, fetcher, {
+    refreshInterval: 1000,
+  });
+
   return (
     <header className=" bg-transparent p-5 2xl:px-40">
       <nav className="flex items-center justify-between">
@@ -38,7 +42,12 @@ export default function Header() {
           <li>
             <Link href="/cart" id="about" className="flex gap-2">
               <ShoppingCart />
-              <p>{cart.length}</p>
+              {isSignedIn && (
+                <>
+                  {isLoading && 0}
+                  {data === undefined ? "" : data.length}
+                </>
+              )}
             </Link>
           </li>
           {isSignedIn && (

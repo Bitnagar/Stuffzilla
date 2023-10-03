@@ -101,7 +101,7 @@ export async function POST(request) {
       status: 201,
     });
   } catch (error) {
-    return new NextResponse(JSON.stringify({ "message": error }), {
+    return new NextResponse(JSON.stringify({ "error": error }), {
       status: 500,
     });
   }

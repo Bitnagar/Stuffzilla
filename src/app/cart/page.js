@@ -3,20 +3,6 @@ import { useAuth } from "@clerk/nextjs";
 import CartProducts from "@/components/CartProducts";
 
 export default function Page() {
-  //to-do
-  /**
-   *
-   * Show all products in cart of the user. if empty show accordingly.
-   *
-   * give option to add or remove the same products.
-   *
-   * give similar products and let user add them.
-   *
-   * show total with discounts, taxes etc (optional)
-   *
-   * give a checkout button.
-   */
-
   const { isSignedIn } = useAuth();
   return (
     <main className="w-full h-full flex">

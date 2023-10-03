@@ -12,6 +12,7 @@ import {
 } from "@clerk/nextjs";
 import useSWR from "swr";
 import { fetcher } from "@/lib/utils";
+import { useEffect } from "react";
 
 export default function Header() {
   const { isSignedIn, userId: id } = useAuth();
@@ -19,6 +20,10 @@ export default function Header() {
   const { data, isLoading } = useSWR(`/api/cart?id=${id}`, fetcher, {
     refreshInterval: 1000,
   });
+
+  useEffect(() => {
+    console.log(data)
+  })
 
   return (
     <header className=" bg-transparent p-5 2xl:px-40">

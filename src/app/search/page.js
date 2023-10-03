@@ -27,9 +27,9 @@ export default function Page() {
         },
         body: payload,
       });
-    } catch (error) {
+          } catch (error) {
       console.error(error);
-    }
+          }
   }
   return (
     <div className="grid grid-cols-3">

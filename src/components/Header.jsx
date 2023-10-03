@@ -12,7 +12,6 @@ import {
 } from "@clerk/nextjs";
 import useSWR from "swr";
 import { fetcher } from "@/lib/utils";
-import { useEffect } from "react";
 
 export default function Header() {
   const { isSignedIn, userId: id } = useAuth();
@@ -20,10 +19,6 @@ export default function Header() {
   const { data, isLoading } = useSWR(`/api/cart?id=${id}`, fetcher, {
     refreshInterval: 1000,
   });
-
-  useEffect(() => {
-    console.log(data)
-  })
 
   return (
     <header className=" bg-transparent p-5 2xl:px-40">
@@ -34,6 +29,11 @@ export default function Header() {
           </h1>
         </div>
         <ul className="flex gap-4 xl:gap-10 [&>li]:font-bold [&>li]:text-sm  items-center 2xl:[&>li]:text-base">
+          <li>
+            <Link href="/search" id="shop">
+              SHOP
+            </Link>
+          </li>
           <li>
             <Link href="/" id="home">
               HOME
@@ -50,7 +50,7 @@ export default function Header() {
               {isSignedIn && (
                 <>
                   {isLoading && 0}
-                  {data === undefined ? "" : data.length}
+                  {data === undefined ? 0 : data.length}
                 </>
               )}
             </Link>

@@ -41,24 +41,23 @@ export default function CartProducts() {
   }
 
   async function addProducts(quantity, productId) {
-    // try {
-    //   const response = await fetch(
-    //     `/api/cart?id=${productId}&quantity=${quantity}&userId=${id}`,
-    //     {
-    //       method: "PATCH",
-    //     }
-    //   );
-    //   const message = await response.json();
-    //   if (message.message) {
-    //     toast({
-    //       description: "✅ Product added successfully!",
-    //     });
-    //   }
-    // } catch (error) {
-    //   toast({
-    //     description: "❌ Failed to add product. Try again.",
-    //   });
-    // }
+    try {
+      const response = await fetch(
+        `/api/cart?id=${productId}&quantity=${quantity}&userId=${id}`,
+        {
+          method: "PATCH",
+        }
+      );
+      const message = await response.json();
+      if (message)
+        toast({
+          description: "✅ Product added successfully!",
+        });
+    } catch (error) {
+      toast({
+        description: "❌ Failed to add product. Try again.",
+      });
+    }
   }
 
   useEffect(() => {

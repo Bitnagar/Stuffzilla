@@ -1,21 +1,15 @@
-"use client";
 import Link from "next/link";
-import { useState, useEffect } from "react";
 
-export default function Sidebar() {
-  const [categories, setCategories] = useState([]);
+export default async function Sidebar() {
+  const categories = await getCategories();
 
-  useEffect(() => {
-    const resp = fetch("https://fakestoreapi.com/products/categories");
-    resp.then((data) => data.json()).then((data) => setCategories(data));
-  }, []);
   return (
     <>
       <Link href={"/search"}>All</Link>
-      {categories.map((c, k) => {
+      {categories.map((category, key) => {
         return (
-          <Link key={k} href={`/search/${c.replaceAll(" ", "-")}`}>
-            {c}
+          <Link key={key} href={`/search/${category.replaceAll(" ", "-")}`}>
+            {category}
           </Link>
         );
       })}
@@ -29,4 +23,10 @@ export default function Sidebar() {
       </div>
     </>
   );
+}
+
+async function getCategories() {
+  const response = await fetch("https://fakestoreapi.com/products/categories");
+  const data = await response.json();
+  return data;
 }

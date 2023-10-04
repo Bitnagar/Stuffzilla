@@ -78,3 +78,69 @@ const data = {
 };
 
 export default data;
+
+// [
+//   {
+//     id: 1,
+//     title: "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",
+//     price: 109.95,
+//     description:
+//       "Your perfect pack for everyday use and walks in tt,o 15 inches) in the padded sleeve, your everyday",
+//     category: "men's clothing",
+//   },
+
+//   {
+//     id: 2,
+//     title: "Mens Casual Premium Slim Fit T-Shirts ",
+//     price: 22.3,
+//     description:
+//       "Slim-fitting style, contrast raglan long sleeve, e, round neckline includes a three-button placket.",
+//     category: "men's clothing",
+//   },
+
+//   {
+//     id: 3,
+//     title: "Mens Cotton Jacket",
+//     price: 55.99,
+//     description:
+//       "great outerwear jackets for Spring/Autumn/Winter,a,nd or son in this thanksgiving or Christmas Day.",
+//     category: "men's clothing",
+//   },
+
+//   {
+//     id: 4,
+//     title: "Mens Casual Slim Fit",
+//     price: 15.99,
+//     description:
+//       "The color could be slightly different between on u,ld be reviewed below on the product description.",
+//     category: "men's clothing",
+//   },
+
+//   {
+//     id: 5,
+//     title:
+//       "John Hardy Women's Legends Naga Gold & Silver Dragon Station Chain Bracelet",
+//     price: 695,
+//     description:
+//       "From our Legends Collection, the Naga was inspiret,h love and abundance, or outward for protection.",
+//     category: "jewelery",
+//   },
+
+//   {
+//     id: 6,
+//     title: "Solid Gold Petite Micropave ",
+//     price: 168,
+//     description:
+//       "Satisfaction Guaranteed. Return or exchange any oe,ed. Return or exchange any order within 30 days.",
+//     category: "jewelery",
+//   },
+
+//   {
+//     id: 7,
+//     title: "White Gold Plated Princess",
+//     price: 9.99,
+//     description:
+//       "Classic Created Wedding Engagement Solitaire Diama,gement, Wedding, Anniversary, Valentine's Day...",
+//     category: "jewelery",
+//   },
+// ];

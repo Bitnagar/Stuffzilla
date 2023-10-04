@@ -165,7 +165,6 @@ export async function DELETE(request) {
 export async function PATCH(request) {
   const { searchParams } = new URL(request.url);
   const uri = process.env.DATABASE_URL;
-  console.log(searchParams);
   const client = new MongoClient(uri);
   const collection = client.db("stuffzilla").collection("cart");
   const product_id = parseInt(searchParams.get("id"));

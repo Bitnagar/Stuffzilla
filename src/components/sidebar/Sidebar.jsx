@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Sort from "./Sort";
 
 export default async function Sidebar() {
   const categories = await getCategories();
@@ -16,10 +17,7 @@ export default async function Sidebar() {
       <br></br>
       <div className="flex flex-col">
         <h1>Sort</h1>
-        <Link href={"/"}>Price: low to high</Link>
-        <Link href={"/"}>Price: high to low</Link>
-        <Link href={"/"}>Rating: lowest</Link>
-        <Link href={"/"}>Rating: highest</Link>
+        <Sort />
       </div>
     </>
   );

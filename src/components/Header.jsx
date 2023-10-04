@@ -50,7 +50,7 @@ export default function Header() {
               {isSignedIn && (
                 <>
                   {isLoading && 0}
-                  {data === undefined ? 0 : data.length}
+                  {data === undefined ? null : data.length}
                 </>
               )}
             </Link>

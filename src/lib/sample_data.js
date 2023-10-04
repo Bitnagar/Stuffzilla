@@ -8,11 +8,11 @@ const data = {
     "delete_self_enabled": true,
     "email_addresses": [
       {
-        "email_address": "contact.ioweyn@gmail.com",
-        "id": "idn_2VKSB726iwM1QXNjCXxLieejMjK",
+        "email_address": "",
+        "id": "idn_hash",
         "linked_to": [
           {
-            "id": "idn_2VKSB4aRst0xQCIXryFK0MJc9op",
+            "id": "idn_hash",
             "type": "oauth_google",
           },
         ],
@@ -28,13 +28,12 @@ const data = {
     ],
     "external_accounts": [
       {
-        "approved_scopes":
-          "email https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile openid profile",
-        "email_address": "contact.ioweyn@gmail.com",
+        "approved_scopes": "",
+        "email_address": "",
         "family_name": "",
-        "given_name": "ioweyounothingg",
+        "given_name": "",
         "google_id": "104502911807642723965",
-        "id": "idn_2VKSB4aRst0xQCIXryFK0MJc9op",
+        "id": "idn_hash",
         "label": null,
         "object": "google_account",
         "picture":
@@ -50,23 +49,21 @@ const data = {
       },
     ],
     "external_id": null,
-    "first_name": "ioweyounothingg",
+    "first_name": "",
     "gender": "",
     "has_image": true,
-    "id": "user_2VKSB7ub7EO2MW6cT5GIkkkdJse",
-    "image_url":
-      "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS9BQ2c4b2NKem4xOVF5S0NuRFpxZmdJekVNRDlTWHkxTnNvaXl5TVZDTm1MU2ZsM0ZtQT1zMTAwMC1jIiwicyI6ImNmV3RvczNhZWlzbENwa3BvemNOUVlDWUthdlpJMndnZ3UzMDBSVU1sazgifQ",
+    "id": "user_hash",
+    "image_url": "",
     "last_name": null,
     "last_sign_in_at": null,
     "object": "user",
     "password_enabled": false,
     "phone_numbers": [],
-    "primary_email_address_id": "idn_2VKSB726iwM1QXNjCXxLieejMjK",
+    "primary_email_address_id": "idn_hash",
     "primary_phone_number_id": null,
     "primary_web3_wallet_id": null,
     "private_metadata": {},
-    "profile_image_url":
-      "https://lh3.googleusercontent.com/a/ACg8ocJzn19QyKCnDZqfgIzEMD9SXy1NsoiyyMVCNmLSfl3FmA=s1000-c",
+    "profile_image_url": "",
     "public_metadata": {},
     "saml_accounts": [],
     "totp_enabled": false,

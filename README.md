@@ -42,6 +42,8 @@ Start the server
 
 ## Roadmap
 
+- Improve UI
+
 - Add Framer Motion.
 
 - Checkout process:

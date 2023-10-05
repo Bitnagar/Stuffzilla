@@ -13,7 +13,7 @@ Create a cluster on MongoDB and get the database URL.
 
 Get the stripe API keys.
 
-Update .env with API keys.
+Update .env with all API keys.
 ```
 
 Clone the project
@@ -25,7 +25,7 @@ Clone the project
 Go to the project directory
 
 ```bash
-  cd my-project
+  cd Stuffzilla
 ```
 
 Install dependencies
@@ -44,10 +44,10 @@ Start the server
 
 - Add Framer Motion.
 
-- Checkout process
+- Checkout process:
   - Improve UI.
-  - Checkout success and acitve urls need to be created.
-  - Update cart Database after checkout.
+  - Checkout success and active urls need to be created.
+  - Update cart database after checkout.
 
 ## Tech Stack
 

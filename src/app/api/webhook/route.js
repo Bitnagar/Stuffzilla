@@ -21,7 +21,7 @@ export async function POST(req) {
   // If there are no headers, error out
   if (!svix_id || !svix_timestamp || !svix_signature) {
     return new Response("Error occured -- no svix headers", {
-      status: 400,
+      status: 400
     });
   }
 
@@ -39,12 +39,12 @@ export async function POST(req) {
     evt = wh.verify(body, {
       "svix-id": svix_id,
       "svix-timestamp": svix_timestamp,
-      "svix-signature": svix_signature,
+      "svix-signature": svix_signature
     });
   } catch (err) {
     console.error("Error verifying webhook:", err);
     return new Response("Error occured", {
-      status: 400,
+      status: 400
     });
   }
 
@@ -58,7 +58,7 @@ export async function POST(req) {
         last_name,
         profile_image_url,
         created_at,
-        updated_at,
+        updated_at
       } = evt.data;
 
       //insert data to mongodb
@@ -71,7 +71,7 @@ export async function POST(req) {
           //if user already exist, then update it. Else create it
           const userData = collection.updateOne(
             {
-              email_address: email_address,
+              email_address: email_address
             },
             {
               $set: {
@@ -81,8 +81,8 @@ export async function POST(req) {
                 email_address: email_address,
                 profile_image_url: profile_image_url,
                 created_at: created_at,
-                updated_at: updated_at,
-              },
+                updated_at: updated_at
+              }
             },
             { upsert: true }
           );
@@ -98,7 +98,7 @@ export async function POST(req) {
       );
     } catch (error) {
       return new Response(JSON.stringify({ "message": error.message }), {
-        status: 500,
+        status: 500
       });
     }
   }

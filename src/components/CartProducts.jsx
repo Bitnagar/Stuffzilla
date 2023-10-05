@@ -16,7 +16,7 @@ export default function CartProducts() {
   const { userId: id } = useAuth();
   const [totalCost, setTotalCost] = useState(0);
   const { data, error, isLoading } = useSWR(`/api/cart?id=${id}`, fetcher, {
-    refreshInterval: 1000,
+    refreshInterval: 1000
   });
 
   async function removeProducts(quantity, productId) {
@@ -24,18 +24,18 @@ export default function CartProducts() {
       const response = await fetch(
         `/api/cart?id=${productId}&quantity=${quantity}&userId=${id}`,
         {
-          method: "DELETE",
+          method: "DELETE"
         }
       );
       const message = await response.json();
       if (message) {
         toast({
-          description: "✅ Product removed successfully!",
+          description: "✅ Product removed successfully!"
         });
       }
     } catch (error) {
       toast({
-        description: "❌ Failed to add product. Try again.",
+        description: "❌ Failed to add product. Try again."
       });
     }
   }
@@ -45,17 +45,17 @@ export default function CartProducts() {
       const response = await fetch(
         `/api/cart?id=${productId}&quantity=${quantity}&userId=${id}`,
         {
-          method: "PATCH",
+          method: "PATCH"
         }
       );
       const message = await response.json();
       if (message)
         toast({
-          description: "✅ Product added successfully!",
+          description: "✅ Product added successfully!"
         });
     } catch (error) {
       toast({
-        description: "❌ Failed to add product. Try again.",
+        description: "❌ Failed to add product. Try again."
       });
     }
   }
@@ -76,9 +76,9 @@ export default function CartProducts() {
       const url = fetch("/api/checkout_session", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data)
       })
         .then((res) => res.json())
         .then((json) => window.location.assign(json));

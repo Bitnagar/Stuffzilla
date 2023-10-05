@@ -8,7 +8,7 @@ import {
   SignInButton,
   SignUpButton,
   useAuth,
-  UserButton,
+  UserButton
 } from "@clerk/nextjs";
 import useSWR from "swr";
 import { fetcher } from "@/lib/utils";
@@ -17,7 +17,7 @@ export default function Header() {
   const { isSignedIn, userId: id } = useAuth();
   const pathname = usePathname();
   const { data, isLoading } = useSWR(`/api/cart?id=${id}`, fetcher, {
-    refreshInterval: 1000,
+    refreshInterval: 1000
   });
 
   return (

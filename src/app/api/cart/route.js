@@ -11,7 +11,7 @@ export async function GET(request) {
   try {
     await client.connect();
     const cart = await collection.findOne({
-      id: id,
+      id: id
     });
     if (cart) {
       await client.close();
@@ -44,11 +44,11 @@ export async function POST(request) {
               {
                 product_id: payload.data.id,
                 details: payload.data,
-                quantity: 1,
-              },
+                quantity: 1
+              }
             ],
             created_at: new Date(),
-            updated: new Date(),
+            updated: new Date()
           });
           return createdCart;
         } else {
@@ -62,32 +62,32 @@ export async function POST(request) {
           if (foundAndUpdated) {
             const updatedProduct = await collection.updateOne(
               {
-                id: payload.userId,
+                id: payload.userId
               },
               {
                 $set: {
                   products: cart.products,
-                  updated: new Date(),
-                },
+                  updated: new Date()
+                }
               }
             );
             return updatedProduct;
           } else {
             const updatedProduct = await collection.updateOne(
               {
-                id: payload.userId,
+                id: payload.userId
               },
               {
                 $push: {
                   products: {
                     product_id: payload.data.id,
                     details: payload.data,
-                    quantity: 1,
-                  },
+                    quantity: 1
+                  }
                 },
                 $set: {
-                  updated: new Date(),
-                },
+                  updated: new Date()
+                }
               }
             );
             return updatedProduct;
@@ -98,11 +98,11 @@ export async function POST(request) {
         if (cartData) await client.close();
       });
     return new NextResponse(JSON.stringify({ "message": "cart updated." }), {
-      status: 201,
+      status: 201
     });
   } catch (error) {
     return new NextResponse(JSON.stringify({ "error": error }), {
-      status: 500,
+      status: 500
     });
   }
 }
@@ -122,12 +122,12 @@ export async function DELETE(request) {
       const updatedCart = collection.updateOne(
         {
           id: userId,
-          products: { $elemMatch: { "product_id": product_id } },
+          products: { $elemMatch: { "product_id": product_id } }
         },
         {
           $set: {
-            "products.$.quantity": quantity - 1,
-          },
+            "products.$.quantity": quantity - 1
+          }
         }
       );
       if (await updatedCart) {
@@ -140,12 +140,12 @@ export async function DELETE(request) {
     } else {
       const updatedCart = collection.updateOne(
         {
-          id: userId,
+          id: userId
         },
         {
           $pull: {
-            products: { product_id: product_id },
-          },
+            products: { product_id: product_id }
+          }
         }
       );
       if (await updatedCart) {
@@ -176,12 +176,12 @@ export async function PATCH(request) {
       const updatedCart = collection.updateOne(
         {
           id: userId,
-          products: { $elemMatch: { "product_id": product_id } },
+          products: { $elemMatch: { "product_id": product_id } }
         },
         {
           $set: {
-            "products.$.quantity": quantity + 1,
-          },
+            "products.$.quantity": quantity + 1
+          }
         }
       );
       if (await updatedCart) {

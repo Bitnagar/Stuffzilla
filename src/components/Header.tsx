@@ -47,7 +47,7 @@ export default function Header() {
           <li>
             <Link href="/cart" id="about" className="flex gap-2">
               <ShoppingCart />
-              {isSignedIn && <>{!isLoading && data && <>{data.length}</>}</>}
+              {isSignedIn && <>{!isLoading && data && <>{data?.products?.length}</>}</>}
             </Link>
           </li>
           {isSignedIn && (

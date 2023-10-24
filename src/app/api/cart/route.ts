@@ -1,10 +1,28 @@
 import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 
+interface CartProducts {
+  product_id: number,
+  details: {
+    id: number;
+    title: string,
+    price: number,
+    description: string,
+    category: string,
+    image: string,
+    rating: [
+      rate: number,
+      count: number
+    ]
+  },
+  quantity: number
+}
+
+const uri = process.env.DATABASE_URL;
+
 //get all products in cart
-export async function GET(request) {
-  const uri = process.env.DATABASE_URL;
-  const client = new MongoClient(uri);
+export async function GET(request: Request) {
+  const client = new MongoClient(uri as string);
   const collection = client.db("stuffzilla").collection("cart");
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
@@ -15,20 +33,19 @@ export async function GET(request) {
     });
     if (cart) {
       await client.close();
-      return NextResponse.json(cart.products, { status: 200 });
+      return NextResponse.json({ products: cart.products }, { status: 200 });
     } else {
       await client.close();
-      return NextResponse.json({ error: "Cart not found" }, { status: 404 });
+      return NextResponse.json({ error: "Cart not found. Please add some Products." }, { status: 200 });
     }
-  } catch (error) {
+  } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
 
 //add items to cart
-export async function POST(request) {
-  const uri = process.env.DATABASE_URL;
-  const client = new MongoClient(uri);
+export async function POST(request: Request) {
+  const client = new MongoClient(uri as string);
   const collection = client.db("stuffzilla").collection("cart");
   const payload = await request.json();
   try {
@@ -37,6 +54,7 @@ export async function POST(request) {
       .then(async () => {
         //check if cart exists for that user. if true, then update the cart. else create a cart.
         const cart = await collection.findOne({ id: payload.userId });
+
         if (!cart) {
           const createdCart = await collection.insertOne({
             id: payload.userId,
@@ -53,7 +71,7 @@ export async function POST(request) {
           return createdCart;
         } else {
           let foundAndUpdated = false;
-          cart.products.map((product) => {
+          cart.products.map((product: CartProducts) => {
             if (product.product_id === payload.data.id) {
               product.quantity += 1;
               foundAndUpdated = true;
@@ -108,13 +126,12 @@ export async function POST(request) {
 }
 
 //remove items from cart
-export async function DELETE(request) {
+export async function DELETE(request: Request) {
   const { searchParams } = new URL(request.url);
-  const uri = process.env.DATABASE_URL;
-  const client = new MongoClient(uri);
+  const client = new MongoClient(uri as string);
   const collection = client.db("stuffzilla").collection("cart");
-  const product_id = parseInt(searchParams.get("id"));
-  const quantity = parseInt(searchParams.get("quantity"));
+  const product_id = parseInt(searchParams.get("id") as string);
+  const quantity = parseInt(searchParams.get("quantity") as string);
   const userId = searchParams.get("userId");
   try {
     await client.connect();
@@ -156,19 +173,18 @@ export async function DELETE(request) {
         { status: 200 }
       );
     }
-  } catch (error) {
+  } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
 
 //remove items from cart
-export async function PATCH(request) {
+export async function PATCH(request: Request) {
   const { searchParams } = new URL(request.url);
-  const uri = process.env.DATABASE_URL;
-  const client = new MongoClient(uri);
+  const client = new MongoClient(uri as string);
   const collection = client.db("stuffzilla").collection("cart");
-  const product_id = parseInt(searchParams.get("id"));
-  const quantity = parseInt(searchParams.get("quantity"));
+  const product_id = parseInt(searchParams.get("id") as string);
+  const quantity = parseInt(searchParams.get("quantity") as string);
   const userId = searchParams.get("userId");
   try {
     await client.connect();
@@ -197,7 +213,7 @@ export async function PATCH(request) {
         { status: 500 }
       );
     }
-  } catch (error) {
+  } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

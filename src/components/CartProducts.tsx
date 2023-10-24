@@ -78,9 +78,9 @@ export default function CartProducts() {
   }
 
   useEffect(() => {
-    if (data) {
+    if (data?.products !== undefined) {
       let totalCost = 0;
-      data.forEach((product: Product) => {
+      data.products.forEach((product: Product) => {
         totalCost += product.details.price * product.quantity;
       });
       setTotalCost(totalCost);
@@ -98,7 +98,7 @@ export default function CartProducts() {
         body: JSON.stringify(data)
       })
         .then((res) => res.json())
-        .then((json) => window.location.assign(json));
+        .then((json) => window.location.assign(json.url));
     } catch (error) {
       console.log(error);
     }
@@ -106,11 +106,11 @@ export default function CartProducts() {
 
   if (isLoading) return <h1>Loading cart...</h1>;
   if (error) return <h1>Some error occured. Reload and try again.</h1>;
-  if (data.length < 1) return <h1>Your cart is empty. Do some shopping!</h1>;
+  if (data?.products === undefined || data.products.length < 1) return <h1>Your cart is empty. Do some shopping!</h1>;
 
   return (
     <>
-      {data.map((product: Product, key: number) => {
+      {data.products.map((product: Product, key: number) => {
         return (
           <div key={key} className="flex gap-10">
             <Image

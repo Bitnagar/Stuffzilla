@@ -1,8 +1,9 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { MongoClient } from "mongodb";
+import { NextResponse } from "next/server";
 
-export async function POST(req) {
+export async function POST(req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 
@@ -32,7 +33,7 @@ export async function POST(req) {
   // Create a new SVIX instance with your secret.
   const wh = new Webhook(WEBHOOK_SECRET);
 
-  let evt;
+  let evt: any;
 
   // Verify the payload with the headers
   try {
@@ -62,7 +63,7 @@ export async function POST(req) {
       } = evt.data;
 
       //insert data to mongodb
-      const uri = process.env.DATABASE_URL;
+      const uri = process.env.DATABASE_URL as string;
       const client = new MongoClient(uri);
       client
         .connect()
@@ -96,14 +97,11 @@ export async function POST(req) {
         JSON.stringify({ "message": "Database updated with user record." }),
         { status: 201 }
       );
-    } catch (error) {
-      return new Response(JSON.stringify({ "message": error.message }), {
+    } catch (error: any) {
+      return NextResponse.json({ "message": error.message }), {
         status: 500
-      });
+      };
     }
   }
-  return new Response(
-    JSON.stringify({ "message": "User record upsert failed." }),
-    { status: 500 }
-  );
+  return NextResponse.json({ "message": "User record upsert failed." }, { status: 500 });
 }

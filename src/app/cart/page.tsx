@@ -6,16 +6,16 @@ export default function Page() {
   const { isSignedIn } = useAuth();
   return (
     <main className="w-full h-full flex">
-      {isSignedIn ? (
+      {isSignedIn ?
         <>
           <section className="w-1/2 h-full bg-slate-500"></section>
           <section className="w-1/2 h-full bg-slate-300 p-8">
             <CartProducts />
           </section>
         </>
-      ) : (
-        <section>You are not signed in!</section>
-      )}
+        : (
+          <section>You are not signed in!</section>
+        )}
     </main>
   );
 }

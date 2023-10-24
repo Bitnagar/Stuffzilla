@@ -8,9 +8,26 @@ import { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { loadStripe } from "@stripe/stripe-js";
 
+interface Product {
+  details: {
+    category: string,
+    description: string,
+    id: number,
+    image: string,
+    price: number,
+    rating: {
+      count: number,
+      rate: number
+    },
+    title: string
+  }
+  product_id: number,
+  quantity: number
+}
+
 export default function CartProducts() {
-  const stripePromise = loadStripe(
-    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+  loadStripe(
+    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
   );
   const { toast } = useToast();
   const { userId: id } = useAuth();
@@ -19,7 +36,7 @@ export default function CartProducts() {
     refreshInterval: 1000
   });
 
-  async function removeProducts(quantity, productId) {
+  async function removeProducts(quantity: number, productId: number) {
     try {
       const response = await fetch(
         `/api/cart?id=${productId}&quantity=${quantity}&userId=${id}`,
@@ -40,7 +57,7 @@ export default function CartProducts() {
     }
   }
 
-  async function addProducts(quantity, productId) {
+  async function addProducts(quantity: number, productId: number) {
     try {
       const response = await fetch(
         `/api/cart?id=${productId}&quantity=${quantity}&userId=${id}`,
@@ -63,17 +80,17 @@ export default function CartProducts() {
   useEffect(() => {
     if (data) {
       let totalCost = 0;
-      data.forEach((product) => {
+      data.forEach((product: Product) => {
         totalCost += product.details.price * product.quantity;
       });
       setTotalCost(totalCost);
     }
   }, [data]);
 
-  async function checkout(e) {
+  async function checkout(e: React.MouseEvent<HTMLButtonElement>): Promise<void> {
     e.preventDefault();
     try {
-      const url = fetch("/api/checkout_session", {
+      fetch("/api/checkout_session", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -93,7 +110,7 @@ export default function CartProducts() {
 
   return (
     <>
-      {data.map((product, key) => {
+      {data.map((product: Product, key: number) => {
         return (
           <div key={key} className="flex gap-10">
             <Image

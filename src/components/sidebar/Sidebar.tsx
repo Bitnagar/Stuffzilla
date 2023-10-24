@@ -1,15 +1,17 @@
 import Link from "next/link";
 import Sort from "./Sort";
 
+type Categories = string[];
+
 export default async function Sidebar() {
   const categories = await getCategories();
 
   return (
     <>
       <Link href={"/search"}>All</Link>
-      {categories.map((category, key) => {
+      {categories.map((category: string, index: number) => {
         return (
-          <Link key={key} href={`/search/${category.replaceAll(" ", "-")}`}>
+          <Link key={index} href={`/search/${category.replaceAll(" ", "-")}`}>
             {category}
           </Link>
         );
@@ -23,7 +25,7 @@ export default async function Sidebar() {
   );
 }
 
-async function getCategories() {
+async function getCategories(): Promise<Categories> {
   const response = await fetch("https://fakestoreapi.com/products/categories");
   const data = await response.json();
   return data;

@@ -14,6 +14,7 @@ interface FakeStoreProducts {
 
 type products = Array<FakeStoreProducts>;
 
+
 export default function Tile({ products, filter }: { products: products, filter: { price?: string, rating?: string } }) {
   if (filter) {
     if (filter.price === "low") {

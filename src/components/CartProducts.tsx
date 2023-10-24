@@ -25,6 +25,8 @@ interface Product {
   quantity: number
 }
 
+type Data = { products: [Product] };
+
 export default function CartProducts() {
   loadStripe(
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
@@ -32,7 +34,7 @@ export default function CartProducts() {
   const { toast } = useToast();
   const { userId: id } = useAuth();
   const [totalCost, setTotalCost] = useState(0);
-  const { data, error, isLoading } = useSWR(`/api/cart?id=${id}`, fetcher, {
+  const { data, error, isLoading } = useSWR<Data>(`/api/cart?id=${id}`, fetcher, {
     refreshInterval: 1000
   });
 
@@ -80,7 +82,7 @@ export default function CartProducts() {
   useEffect(() => {
     if (data?.products !== undefined) {
       let totalCost = 0;
-      data.products.forEach((product: Product) => {
+      data?.products.forEach((product: Product) => {
         totalCost += product.details.price * product.quantity;
       });
       setTotalCost(totalCost);

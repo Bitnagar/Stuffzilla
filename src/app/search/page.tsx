@@ -1,8 +1,7 @@
 import Tile from "@/components/Products/Tile";
 
-export default async function Page({ searchParams }) {
+export default async function Page({ searchParams }: { searchParams: { price?: string, rating?: string } }) {
   const products = await getAllProducts();
-
   return (
     <div className="grid grid-cols-3">
       <Tile products={products} filter={searchParams} />

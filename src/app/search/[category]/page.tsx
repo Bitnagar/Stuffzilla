@@ -1,6 +1,12 @@
 import Tile from "@/components/Products/Tile";
 
-export default async function Page({ params, searchParams }) {
+export default async function Page({
+  params,
+  searchParams,
+}: {
+  params: { category: string }
+  searchParams: { [key: string]: string | string[] | undefined }
+}) {
   const category = params.category.replaceAll("-", " ");
   const response = await fetch(
     `https://fakestoreapi.com/products/category/${category}`

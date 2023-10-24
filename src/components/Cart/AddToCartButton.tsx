@@ -4,10 +4,25 @@ import { useAuth } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 
-export default function AddToCartButton({ product }) {
+interface FakeStoreProducts {
+  id: number,
+  title: string,
+  price: number,
+  description: string,
+  category: string
+  image: string,
+  rating: { rate: number, count: number }
+}
+
+interface AddToCartButtonProps {
+  product: FakeStoreProducts;
+  children?: React.ReactNode;
+}
+
+export default function AddToCartButton({ product, children }: AddToCartButtonProps) {
   const { toast } = useToast();
   const { userId } = useAuth();
-  async function addToCart(product) {
+  async function addToCart(product: FakeStoreProducts) {
     const payload = JSON.stringify({ data: product, userId: userId });
     try {
       const response = await fetch("/api/cart", {

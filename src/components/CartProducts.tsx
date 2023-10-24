@@ -8,18 +8,37 @@ import { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { loadStripe } from "@stripe/stripe-js";
 
+interface Product {
+  details: {
+    category: string,
+    description: string,
+    id: number,
+    image: string,
+    price: number,
+    rating: {
+      count: number,
+      rate: number
+    },
+    title: string
+  }
+  product_id: number,
+  quantity: number
+}
+
+type Data = { products: [Product] };
+
 export default function CartProducts() {
-  const stripePromise = loadStripe(
-    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+  loadStripe(
+    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
   );
   const { toast } = useToast();
   const { userId: id } = useAuth();
   const [totalCost, setTotalCost] = useState(0);
-  const { data, error, isLoading } = useSWR(`/api/cart?id=${id}`, fetcher, {
+  const { data, error, isLoading } = useSWR<Data>(`/api/cart?id=${id}`, fetcher, {
     refreshInterval: 1000
   });
 
-  async function removeProducts(quantity, productId) {
+  async function removeProducts(quantity: number, productId: number) {
     try {
       const response = await fetch(
         `/api/cart?id=${productId}&quantity=${quantity}&userId=${id}`,
@@ -40,7 +59,7 @@ export default function CartProducts() {
     }
   }
 
-  async function addProducts(quantity, productId) {
+  async function addProducts(quantity: number, productId: number) {
     try {
       const response = await fetch(
         `/api/cart?id=${productId}&quantity=${quantity}&userId=${id}`,
@@ -61,19 +80,19 @@ export default function CartProducts() {
   }
 
   useEffect(() => {
-    if (data) {
+    if (data?.products !== undefined) {
       let totalCost = 0;
-      data.forEach((product) => {
+      data?.products.forEach((product: Product) => {
         totalCost += product.details.price * product.quantity;
       });
       setTotalCost(totalCost);
     }
   }, [data]);
 
-  async function checkout(e) {
+  async function checkout(e: React.MouseEvent<HTMLButtonElement>): Promise<void> {
     e.preventDefault();
     try {
-      const url = fetch("/api/checkout_session", {
+      fetch("/api/checkout_session", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -81,7 +100,7 @@ export default function CartProducts() {
         body: JSON.stringify(data)
       })
         .then((res) => res.json())
-        .then((json) => window.location.assign(json));
+        .then((json) => window.location.assign(json.url));
     } catch (error) {
       console.log(error);
     }
@@ -89,11 +108,11 @@ export default function CartProducts() {
 
   if (isLoading) return <h1>Loading cart...</h1>;
   if (error) return <h1>Some error occured. Reload and try again.</h1>;
-  if (data.length < 1) return <h1>Your cart is empty. Do some shopping!</h1>;
+  if (data?.products === undefined || data.products.length < 1) return <h1>Your cart is empty. Do some shopping!</h1>;
 
   return (
     <>
-      {data.map((product, key) => {
+      {data.products.map((product: Product, key: number) => {
         return (
           <div key={key} className="flex gap-10">
             <Image

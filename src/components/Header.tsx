@@ -13,10 +13,29 @@ import {
 import useSWR from "swr";
 import { fetcher } from "@/lib/utils";
 
+interface Product {
+  details: {
+    category: string,
+    description: string,
+    id: number,
+    image: string,
+    price: number,
+    rating: {
+      count: number,
+      rate: number
+    },
+    title: string
+  }
+  product_id: number,
+  quantity: number
+}
+
+type Data = { products: [Product] };
+
 export default function Header() {
   const { isSignedIn, userId: id } = useAuth();
   const pathname = usePathname();
-  const { data, isLoading } = useSWR(`/api/cart?id=${id}`, fetcher, {
+  const { data, isLoading } = useSWR<Data>(`/api/cart?id=${id}`, fetcher, {
     refreshInterval: 1000
   });
 
@@ -47,7 +66,7 @@ export default function Header() {
           <li>
             <Link href="/cart" id="about" className="flex gap-2">
               <ShoppingCart />
-              {isSignedIn && <>{!isLoading && data && <>{data.length}</>}</>}
+              {isSignedIn && <>{!isLoading && data && <>{data.products.length}</>}</>}
             </Link>
           </li>
           {isSignedIn && (

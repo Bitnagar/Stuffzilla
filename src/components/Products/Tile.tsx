@@ -2,7 +2,20 @@
 import Image from "next/image";
 import AddToCartButton from "@/components/Cart/AddToCartButton";
 
-export default function Tile({ products, filter }) {
+interface FakeStoreProducts {
+  id: number,
+  title: string,
+  price: number,
+  description: string,
+  category: string
+  image: string,
+  rating: { rate: number, count: number }
+}
+
+type products = Array<FakeStoreProducts>;
+
+
+export default function Tile({ products, filter }: { products: products, filter: { price?: string, rating?: string } }) {
   if (filter) {
     if (filter.price === "low") {
       products.sort((a, b) => a.price - b.price);

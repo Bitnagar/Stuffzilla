@@ -12,23 +12,7 @@ import {
 } from "@clerk/nextjs";
 import useSWR from "swr";
 import { fetcher } from "@/lib/utils";
-
-interface Product {
-  details: {
-    category: string,
-    description: string,
-    id: number,
-    image: string,
-    price: number,
-    rating: {
-      count: number,
-      rate: number
-    },
-    title: string
-  }
-  product_id: number,
-  quantity: number
-}
+import { Product } from "../types/components.types";
 
 type Data = { products: [Product] };
 

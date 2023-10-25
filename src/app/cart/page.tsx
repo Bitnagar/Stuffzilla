@@ -1,6 +1,6 @@
 "use client";
 import { useAuth } from "@clerk/nextjs";
-import CartProducts from "@/components/CartProducts";
+import CartProducts from "@/components/Cart/CartProducts";
 
 export default function Page() {
   const { isSignedIn } = useAuth();

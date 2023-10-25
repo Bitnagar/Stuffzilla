@@ -1,19 +1,9 @@
 "use client";
 import Image from "next/image";
+import { FakeStoreProducts } from "../types/components.types";
 import AddToCartButton from "@/components/Cart/AddToCartButton";
 
-interface FakeStoreProducts {
-  id: number,
-  title: string,
-  price: number,
-  description: string,
-  category: string
-  image: string,
-  rating: { rate: number, count: number }
-}
-
 type products = Array<FakeStoreProducts>;
-
 
 export default function Tile({ products, filter }: { products: products, filter: { price?: string, rating?: string } }) {
   if (filter) {

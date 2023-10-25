@@ -1,7 +1,7 @@
 import "./globals.css";
-import Header from "@/components/Header";
+import Header from "@/components/layout/Header";
 import { Inter } from "next/font/google";
-import Footer from "@/components/Footer";
+import Footer from "@/components/layout/Footer";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Metadata } from "next"
 import { Toaster } from "@/components/ui/toaster";

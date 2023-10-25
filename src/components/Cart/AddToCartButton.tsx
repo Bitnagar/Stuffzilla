@@ -3,16 +3,7 @@ import React from "react";
 import { useAuth } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-
-interface FakeStoreProducts {
-  id: number,
-  title: string,
-  price: number,
-  description: string,
-  category: string
-  image: string,
-  rating: { rate: number, count: number }
-}
+import { FakeStoreProducts } from "../types/components.types";
 
 interface AddToCartButtonProps {
   product: FakeStoreProducts;

@@ -3,27 +3,11 @@ import useSWR from "swr";
 import { useAuth } from "@clerk/nextjs";
 import { fetcher } from "@/lib/utils";
 import Image from "next/image";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { loadStripe } from "@stripe/stripe-js";
-
-interface Product {
-  details: {
-    category: string,
-    description: string,
-    id: number,
-    image: string,
-    price: number,
-    rating: {
-      count: number,
-      rate: number
-    },
-    title: string
-  }
-  product_id: number,
-  quantity: number
-}
+import { Product } from "../types/components.types";
 
 type Data = { products: [Product] };
 

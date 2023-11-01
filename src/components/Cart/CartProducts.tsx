@@ -63,6 +63,23 @@ export default function CartProducts() {
     }
   }
 
+  async function checkout(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    try {
+      fetch("/api/checkout_session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({data: data, userId:id })
+      })
+        .then((res) => res.json())
+        .then((json) => window.location.assign(json.url));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     if (data?.products !== undefined) {
       let totalCost = 0;
@@ -72,23 +89,6 @@ export default function CartProducts() {
       setTotalCost(totalCost);
     }
   }, [data]);
-
-  async function checkout(e: React.MouseEvent<HTMLButtonElement>): Promise<void> {
-    e.preventDefault();
-    try {
-      fetch("/api/checkout_session", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-      })
-        .then((res) => res.json())
-        .then((json) => window.location.assign(json.url));
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   if (isLoading) return <h1>Loading cart...</h1>;
   if (error) return <h1>Some error occured. Reload and try again.</h1>;

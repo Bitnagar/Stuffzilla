@@ -1,4 +1,3 @@
-"use client";
 import useSWR from "swr";
 import { useAuth } from "@clerk/nextjs";
 import { fetcher } from "@/lib/utils";
@@ -9,7 +8,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { loadStripe } from "@stripe/stripe-js";
 import { Product } from "../types/components.types";
 
-type Data = { products: [Product] };
+type Data = { products: Array<Product> }
 
 export default function CartProducts() {
   loadStripe(

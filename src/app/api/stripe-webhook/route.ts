@@ -4,7 +4,7 @@ import { MongoClient } from "mongodb";
 const uri = process.env.DATABASE_URL;
 
 export async function POST(req: Request) {
-  const event = await req.json();
+  const event = await req.json();  
   if(event.type === "checkout.session.completed") {
     const client = new MongoClient(uri as string);
     const collection = client.db("stuffzilla").collection("transactions");

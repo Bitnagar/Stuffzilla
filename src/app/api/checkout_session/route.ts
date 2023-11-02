@@ -4,6 +4,14 @@ import { headers } from "next/headers";
 import { MongoClient } from "mongodb";
 
 const uri = process.env.DATABASE_URL as string;
+
+function getExpiresAtTime(afterMinutes: number): number {
+  const currentDate = new Date();
+  const epochTimeMilliseconds = currentDate.getTime();
+  const epochTimeSeconds = Math.floor(epochTimeMilliseconds / 1000);
+  const expires_at = epochTimeSeconds + afterMinutes * 60;
+  return expires_at;
+}
 interface PayloadProduct {
   product_id: number,
   details: {
@@ -45,6 +53,7 @@ export async function POST(req: Request) {
     const session = await stripe.checkout.sessions.create({
       line_items,
       mode: "payment",
+      expires_at: getExpiresAtTime(30),
       success_url: headersList.get("origin") + `/checkout-success`,
       cancel_url: headersList.get("origin") + "/cart"
     });
@@ -75,5 +84,27 @@ export async function POST(req: Request) {
     return NextResponse.json({ url: session.url });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: Request) {
+  const client = new MongoClient(uri as string);
+  const collection = client.db("stuffzilla").collection("transactions");
+  const payload = await req.json();
+  try {
+    client
+    .connect()
+    .then(async () => {
+      const deletedData = await collection.deleteMany({
+        userId: payload.userId,
+        status: "pending"
+      });
+    })
+    .then(
+      async data => await client.close()
+    );
+    return NextResponse.json({message: "Pending transaction(s) removed."})
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

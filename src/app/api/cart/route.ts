@@ -49,72 +49,63 @@ export async function POST(request: Request) {
   const collection = client.db("stuffzilla").collection("cart");
   const payload = await request.json();
   try {
-    client
-      .connect()
-      .then(async () => {
-        //check if cart exists for that user. if true, then update the cart. else create a cart.
-        const cart = await collection.findOne({ id: payload.userId });
-
-        if (!cart) {
-          const createdCart = await collection.insertOne({
-            id: payload.userId,
-            products: [
-              {
+    await client .connect()
+    //check if cart exists for that user. if true, then update the cart. else create a cart.
+    const cart = await collection.findOne({ id: payload.userId });
+    if (!cart) {
+      await collection.insertOne({
+        id: payload.userId,
+        products: [
+          {
+            product_id: payload.data.id,
+            details: payload.data,
+            quantity: 1
+          }
+        ],
+        created_at: new Date(),
+        updated: new Date()
+      });
+    } else {
+      let foundAndUpdated = false;
+      cart.products.map((product: CartProducts) => {
+        if (product.product_id === payload.data.id) {
+          product.quantity += 1;
+          foundAndUpdated = true;
+        }
+      });
+      if (foundAndUpdated) {
+        await collection.updateOne(
+          {
+            id: payload.userId
+          },
+          {
+            $set: {
+              products: cart.products,
+              updated: new Date()
+            }
+          }
+        );
+      } else {
+        await collection.updateOne(
+          {
+            id: payload.userId
+          },
+          {
+            $push: {
+              products: {
                 product_id: payload.data.id,
                 details: payload.data,
                 quantity: 1
               }
-            ],
-            created_at: new Date(),
-            updated: new Date()
-          });
-          return createdCart;
-        } else {
-          let foundAndUpdated = false;
-          cart.products.map((product: CartProducts) => {
-            if (product.product_id === payload.data.id) {
-              product.quantity += 1;
-              foundAndUpdated = true;
+            },
+            $set: {
+              updated: new Date()
             }
-          });
-          if (foundAndUpdated) {
-            const updatedProduct = await collection.updateOne(
-              {
-                id: payload.userId
-              },
-              {
-                $set: {
-                  products: cart.products,
-                  updated: new Date()
-                }
-              }
-            );
-            return updatedProduct;
-          } else {
-            const updatedProduct = await collection.updateOne(
-              {
-                id: payload.userId
-              },
-              {
-                $push: {
-                  products: {
-                    product_id: payload.data.id,
-                    details: payload.data,
-                    quantity: 1
-                  }
-                },
-                $set: {
-                  updated: new Date()
-                }
-              }
-            );
-            return updatedProduct;
           }
-        }
-      })
-      .then(async (cartData) => {
-        if (cartData) await client.close();
-      });
+        );
+      }
+    }
+    await client.close();
     return new NextResponse(JSON.stringify({ "message": "cart updated." }), {
       status: 201
     });

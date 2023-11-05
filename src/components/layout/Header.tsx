@@ -19,7 +19,7 @@ type Data = { products: [Product] };
 export default function Header() {
   const { isSignedIn, userId: id } = useAuth();
   const pathname = usePathname();
-  const { data, isLoading } = useSWR<Data>(`/api/cart?id=${id}`, fetcher, {
+  const { data } = useSWR<Data>(`/api/cart?id=${id}`, fetcher, {
     refreshInterval: 1000
   });
 
@@ -50,7 +50,7 @@ export default function Header() {
           <li>
             <Link href="/cart" id="about" className="flex gap-2">
               <ShoppingCart />
-              {isSignedIn && <>{!isLoading && data && <>{data.products.length}</>}</>}
+              {isSignedIn && data?.products !== undefined ? (<>{data?.products.length}</>) : 0}
             </Link>
           </li>
           {isSignedIn && (

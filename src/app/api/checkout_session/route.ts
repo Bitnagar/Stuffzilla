@@ -12,6 +12,7 @@ function getExpiresAtTime(afterMinutes: number): number {
   const expires_at = epochTimeSeconds + afterMinutes * 60;
   return expires_at;
 }
+
 interface PayloadProduct {
   product_id: number,
   details: {
@@ -27,7 +28,6 @@ interface PayloadProduct {
     ]
   },
   quantity: number
-
 }
 
 export async function POST(req: Request) {
@@ -57,26 +57,20 @@ export async function POST(req: Request) {
       success_url: headersList.get("origin") + `/checkout-success`,
       cancel_url: headersList.get("origin") + "/cart"
     });
-    if(session && session.object === "checkout.session") {
+    if (session && session.object === "checkout.session") {
       const client = new MongoClient(uri as string);
       const collection = client.db("stuffzilla").collection("transactions");
       try {
-        client
-      .connect()
-      .then(async () => {
-          const insertedData = await collection.insertOne({
-            userId: payload.userId,
-            checkoutSessionId: session.id,
-            amount: session.amount_total,
-            status: "pending",
-            created_at: new Date(),
-            updated: new Date()
-          })
-          return insertedData;
+        await client.connect()
+        await collection.insertOne({
+          userId: payload.userId,
+          checkoutSessionId: session.id,
+          amount: session.amount_total,
+          status: "pending",
+          created_at: new Date(),
+          updated: new Date()
         })
-        .then(
-          async data => await client.close()
-        );
+        await client.close();
       } catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
       }
@@ -92,18 +86,13 @@ export async function DELETE(req: Request) {
   const collection = client.db("stuffzilla").collection("transactions");
   const payload = await req.json();
   try {
-    client
-    .connect()
-    .then(async () => {
-      const deletedData = await collection.deleteMany({
-        userId: payload.userId,
-        status: "pending"
-      });
-    })
-    .then(
-      async data => await client.close()
-    );
-    return NextResponse.json({message: "Pending transaction(s) removed."})
+    await client.connect()
+    await collection.deleteMany({
+      userId: payload.userId,
+      status: "pending"
+    });
+    await client.close();
+    return NextResponse.json({ message: "Pending transaction(s) removed." })
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
